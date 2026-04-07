@@ -38,11 +38,11 @@ export async function joinSession(req, res) {
     console.log("Joining email:", joiningEmail);
 
     // ❗ only check email if user logged in
-    if (userEmail && invitedEmail && invitedEmail !== joiningEmail) {
-      return res.status(403).json({
-        message: "You are not invited",
-      });
-    }
+    // if (userEmail && invitedEmail && invitedEmail !== joiningEmail) {
+    //   return res.status(403).json({
+    //     message: "You are not invited",
+    //   });
+    // }
 
     // ❗ allow join even without login
     session.participant = userId || null;
