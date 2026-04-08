@@ -30,7 +30,7 @@ app.use(
   })
 );
 
-app.use(clerkMiddleware());
+//app.use(clerkMiddleware());
 
 // routes
 // routes
