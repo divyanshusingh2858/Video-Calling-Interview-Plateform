@@ -178,11 +178,19 @@ export async function joinSession(req, res) {
       });
     }
 
-    session.participant = userId;
+    //session.participant = userId;
+    if (userId) {
+  session.participant = userId;
+}
     await session.save();
 
+
     const channel = chatClient.channel("messaging", session.callId);
-    await channel.addMembers([clerkId]);
+    // await channel.addMembers([clerkId]);
+    if (clerkId) {
+  const channel = chatClient.channel("messaging", session.callId);
+  await channel.addMembers([clerkId]);
+}
 
     console.log("✅ Join successful!");
     res.status(200).json({ session });
