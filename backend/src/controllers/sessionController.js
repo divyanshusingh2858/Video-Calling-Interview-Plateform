@@ -4,8 +4,8 @@ import Session from "../models/Session.js";
 export async function createSession(req, res) {
   try {
     const { problem, difficulty, invitedEmail } = req.body;
-    const userId = req.user._id;
-    const clerkId = req.user.clerkId;
+    const userId = req.user?._id;
+    const clerkId = req.user?.clerkId;
 
     // 🔴 STEP 1 DEBUG LOGS - ADD THESE
     console.log("========== CREATING SESSION ==========");
@@ -166,17 +166,19 @@ export async function joinSession(req, res) {
     }
 
     // 🔴 IMPROVED: Case-insensitive comparison with trimming
-    const invitedEmail = session.invitedParticipantEmail?.trim().toLowerCase();
-    const joiningEmail = userEmail?.trim().toLowerCase();
+    // const invitedEmail = session.invitedParticipantEmail?.trim().toLowerCase();
+    // const joiningEmail = userEmail?.trim().toLowerCase();
 
-    console.log("Invited email:", invitedEmail);
-    console.log("Joining email:", joiningEmail);
+    // console.log("Invited email:", invitedEmail);
+    // console.log("Joining email:", joiningEmail);
 
-    if (invitedEmail && invitedEmail !== joiningEmail) {
-      return res.status(403).json({ 
-        message: `This session was created for ${session.invitedParticipantEmail}. Your email (${userEmail}) is not invited.` 
-      });
-    }
+    // if (invitedEmail && invitedEmail !== joiningEmail) {
+    //   return res.status(403).json({ 
+    //     message: `This session was created for ${session.invitedParticipantEmail}. Your email (${userEmail}) is not invited.` 
+    //   });
+    // }
+    // ✅ skip email restriction (fix)
+console.log("Skipping email check - allowing all users to join");
 
     session.participant = userId;
     await session.save();
