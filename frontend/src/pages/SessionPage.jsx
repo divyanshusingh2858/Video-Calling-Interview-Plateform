@@ -47,34 +47,31 @@ function SessionPage() {
   const [code, setCode] = useState(problemData?.starterCode?.[selectedLanguage] || "");
 
   // auto-join session if user is not already a participant and not the host
-  useEffect(() => {
+  const [hasJoined, setHasJoined] = useState(false);
+
+useEffect(() => {
   if (!session || !user || loadingSession) return;
+
+  // already joined या host है → skip
   if (isHost || isParticipant) return;
 
-  const userEmail = user.primaryEmailAddress?.emailAddress;
+  // already try कर चुके → loop रोको
+  if (hasJoined) return;
 
-  if (session.invitedParticipantEmail && session.invitedParticipantEmail.toLowerCase() !== userEmail?.toLowerCase()) {
-    toast.error(`This session was created for ${session.invitedParticipantEmail}. Your email (${userEmail}) is not invited.`);
-    setTimeout(() => navigate("/dashboard"), 3000);
-    return;
-  }
+  console.log("🚀 Joining once...");
 
-  joinSessionMutation.mutate(id, { 
+  joinSessionMutation.mutate(id, {
     onSuccess: () => {
-      refetch();
+      setHasJoined(true); // 🔥 LOOP STOP
       toast.success("Joined session successfully!");
     },
     onError: (error) => {
       console.error("Join error:", error);
-      if (error.response?.status === 403) {
-        toast.error(error.response?.data?.message || "You are not invited to this session");
-      } else {
-        toast.error(error.message || "Failed to join session");
-      }
-      setTimeout(() => navigate("/dashboard"), 3000);
+      toast.error(error.message || "Failed to join session");
     }
   });
-}, [session, user, loadingSession, isHost, isParticipant, id, navigate, joinSessionMutation, refetch]);
+
+}, [session, user, loadingSession, isHost, isParticipant, id, hasJoined]);
 
   // redirect the "participant" when session ends
   useEffect(() => {
