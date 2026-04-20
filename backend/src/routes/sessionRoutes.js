@@ -39,7 +39,7 @@ router.get("/my-recent", (req, res, next) => {
 }, getMyRecentSessions);
 
 // Join session
-router.post("/:id/join",protectRoute, joinSession);
+router.post("/:id/join", joinSession);
 
 // End session
 router.post("/:id/end", protectRoute, endSession);
