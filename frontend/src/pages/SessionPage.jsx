@@ -48,37 +48,33 @@ function SessionPage() {
 
   // auto-join session if user is not already a participant and not the host
   useEffect(() => {
-    if (!session || !user || loadingSession) return;
-    if (isHost || isParticipant) return;
+  if (!session || !user || loadingSession) return;
+  if (isHost || isParticipant) return;
 
-    // Check if user's email matches invited email before trying to join
-    // const userEmail = user.primaryEmailAddress?.emailAddress;
-    
-    // if (session.invitedParticipantEmail && session.invitedParticipantEmail.toLowerCase() !== userEmail?.toLowerCase()) {
-    //   toast.error(`This session was created for ${session.invitedParticipantEmail}. Your email (${userEmail}) is not invited.`);
-    //   setTimeout(() => navigate("/dashboard"), 3000);
-    //   return;
-    // }
+  const userEmail = user.primaryEmailAddress?.emailAddress;
 
-    joinSessionMutation.mutate(id, { 
-      onSuccess: () => {
-        refetch();
-        toast.success("Joined session successfully!");
-      },
-      onError: (error) => {
-        console.error("Join error:", error);
-        
-        // Check if it's a 403 forbidden (wrong email)
-        if (error.response?.status === 403) {
-          toast.error(error.response?.data?.message || "You are not invited to this session");
-        } else {
-          toast.error(error.message || "Failed to join session");
-        }
-        // Redirect after showing error
-        setTimeout(() => navigate("/dashboard"), 3000);
+  if (session.invitedParticipantEmail && session.invitedParticipantEmail.toLowerCase() !== userEmail?.toLowerCase()) {
+    toast.error(`This session was created for ${session.invitedParticipantEmail}. Your email (${userEmail}) is not invited.`);
+    setTimeout(() => navigate("/dashboard"), 3000);
+    return;
+  }
+
+  joinSessionMutation.mutate(id, { 
+    onSuccess: () => {
+      refetch();
+      toast.success("Joined session successfully!");
+    },
+    onError: (error) => {
+      console.error("Join error:", error);
+      if (error.response?.status === 403) {
+        toast.error(error.response?.data?.message || "You are not invited to this session");
+      } else {
+        toast.error(error.message || "Failed to join session");
       }
-    });
-  }, [session, user, loadingSession, isHost, isParticipant, id, navigate, joinSessionMutation, refetch]);
+      setTimeout(() => navigate("/dashboard"), 3000);
+    }
+  });
+}, [session, user, loadingSession, isHost, isParticipant, id, navigate, joinSessionMutation, refetch]);
 
   // redirect the "participant" when session ends
   useEffect(() => {
