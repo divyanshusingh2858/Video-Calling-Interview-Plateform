@@ -52,13 +52,13 @@ function SessionPage() {
     if (isHost || isParticipant) return;
 
     // Check if user's email matches invited email before trying to join
-    const userEmail = user.primaryEmailAddress?.emailAddress;
+    // const userEmail = user.primaryEmailAddress?.emailAddress;
     
-    if (session.invitedParticipantEmail && session.invitedParticipantEmail.toLowerCase() !== userEmail?.toLowerCase()) {
-      toast.error(`This session was created for ${session.invitedParticipantEmail}. Your email (${userEmail}) is not invited.`);
-      setTimeout(() => navigate("/dashboard"), 3000);
-      return;
-    }
+    // if (session.invitedParticipantEmail && session.invitedParticipantEmail.toLowerCase() !== userEmail?.toLowerCase()) {
+    //   toast.error(`This session was created for ${session.invitedParticipantEmail}. Your email (${userEmail}) is not invited.`);
+    //   setTimeout(() => navigate("/dashboard"), 3000);
+    //   return;
+    // }
 
     joinSessionMutation.mutate(id, { 
       onSuccess: () => {
