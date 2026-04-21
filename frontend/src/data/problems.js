@@ -77,3 +77,10 @@ export const PROBLEMS = {
     ]
   }
 };
+export const LANGUAGE_CONFIG = {
+  javascript: {
+    name: "JavaScript",
+    icon: "...",
+    monacoLang: "javascript"
+  }
+};

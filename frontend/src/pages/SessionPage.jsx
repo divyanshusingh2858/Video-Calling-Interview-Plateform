@@ -5,6 +5,7 @@ import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessi
 import { PROBLEMS } from "../data/problems";
 import { executeCode } from "../lib/piston";
 import toast from "react-hot-toast";
+import CodeEditorPanel from "../components/CodeEditorPanel";
 
 function SessionPage() {
   const navigate = useNavigate();
