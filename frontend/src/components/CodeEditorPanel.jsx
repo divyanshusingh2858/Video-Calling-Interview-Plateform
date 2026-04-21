@@ -1,13 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { Loader2Icon, PlayIcon } from "lucide-react";
-
-const LANGUAGE_CONFIG = {
-  javascript: {
-    name: "JavaScript",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
-    monacoLang: "javascript"
-  }
-};
+import { LANGUAGE_CONFIG } from "../data/problems";
 
 function CodeEditorPanel({
   selectedLanguage,
@@ -26,12 +19,7 @@ function CodeEditorPanel({
             alt={LANGUAGE_CONFIG[selectedLanguage].name}
             className="size-6"
           />
-
-          <select
-            className="select select-sm"
-            value={selectedLanguage}
-            onChange={onLanguageChange}
-          >
+          <select className="select select-sm" value={selectedLanguage} onChange={onLanguageChange}>
             {Object.entries(LANGUAGE_CONFIG).map(([key, lang]) => (
               <option key={key} value={key}>
                 {lang.name}
@@ -40,11 +28,7 @@ function CodeEditorPanel({
           </select>
         </div>
 
-        <button
-          className="btn btn-primary btn-sm gap-2"
-          disabled={isRunning}
-          onClick={onRunCode}
-        >
+        <button className="btn btn-primary btn-sm gap-2" disabled={isRunning} onClick={onRunCode}>
           {isRunning ? (
             <>
               <Loader2Icon className="size-4 animate-spin" />
@@ -61,15 +45,21 @@ function CodeEditorPanel({
 
       <div className="flex-1">
         <Editor
-          height="100%"
+          height={"100%"}
           language={LANGUAGE_CONFIG[selectedLanguage].monacoLang}
           value={code}
-          onChange={(value) => onCodeChange(value)}
+          onChange={onCodeChange}
           theme="vs-dark"
+          options={{
+            fontSize: 16,
+            lineNumbers: "on",
+            scrollBeyondLastLine: false,
+            automaticLayout: true,
+            minimap: { enabled: false },
+          }}
         />
       </div>
     </div>
   );
 }
-
 export default CodeEditorPanel;
